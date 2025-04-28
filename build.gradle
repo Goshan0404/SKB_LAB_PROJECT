@@ -12,15 +12,26 @@ repositories {
 }
 
 dependencies {
+
+    implementation 'org.modelmapper:modelmapper:3.1.1'
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation 'org.hibernate.orm:hibernate-core:6.3.1.Final'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'org.postgresql:postgresql'
     implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.8.2'
     implementation 'org.liquibase:liquibase-core'
 
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-validation:2.3.0.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
