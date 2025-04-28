@@ -1,5 +1,6 @@
 package sinara_project.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,7 @@ import sinara_project.models.user.UserApp;
 import sinara_project.models.user.UserRegisterDto;
 import sinara_project.repositories.UserRepository;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -30,6 +32,7 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
     public UserApp register(UserRegisterDto user) {
+        log.info("Регистрация пользователя");
         UserApp userApp = modelMapper.map(user, UserApp.class);
         userApp.setPassword(bCryptPasswordEncoder.encode(userApp.getPassword()));
         return userRepository.save(userApp);
@@ -40,8 +43,10 @@ public class UserService {
                 .authenticate(
                         new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
 
-        if (!authentication.isAuthenticated())
+        if (!authentication.isAuthenticated()) {
+            log.info("Аунтификация неудалась");
             return "fail";
+        }
         return jwtService.generate(user.getName());
     }
 }
