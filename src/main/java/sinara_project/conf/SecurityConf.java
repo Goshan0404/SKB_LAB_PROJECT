@@ -1,6 +1,7 @@
 package sinara_project.conf;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -69,11 +70,10 @@ public class SecurityConf {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider(@Value("${security.encoder.strength}") int encoderStrength) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
-        // убарть 12 в констатнту как и в контроллере
-        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(encoderStrength));
         provider.setUserDetailsService(userDetailsService);
 
         return provider;

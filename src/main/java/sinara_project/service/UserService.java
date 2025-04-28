@@ -3,6 +3,7 @@ package sinara_project.service;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,20 +17,25 @@ import sinara_project.repositories.UserRepository;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final JWTService jwtService;
+    private final AuthenticationManager authenticationManager;
+    private final ModelMapper modelMapper;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    private JWTService jwtService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    // убарть 12 в констатнту как и в конфиге
-    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
+    public UserService(UserRepository userRepository,
+                       JWTService jwtService,
+                       AuthenticationManager authenticationManager,
+                       ModelMapper modelMapper,
+                       @Value("${security.encoder.strength}") int encoderStrength) {
+        this.userRepository = userRepository;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+        this.modelMapper = modelMapper;
+        this.bCryptPasswordEncoder = new BCryptPasswordEncoder(encoderStrength);
+    }
 
     public UserApp register(UserRegisterDto user) {
         log.info("Регистрация пользователя");
