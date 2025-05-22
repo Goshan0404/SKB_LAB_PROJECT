@@ -22,7 +22,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder encoder;
 
     @Autowired
     public UserService(UserRepository userRepository,
@@ -34,25 +34,23 @@ public class UserService {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.modelMapper = modelMapper;
-        this.bCryptPasswordEncoder = new BCryptPasswordEncoder(encoderStrength);
+        this.encoder = new BCryptPasswordEncoder(encoderStrength);
     }
 
     public UserApp register(UserRegisterDto user) {
-        log.info("Регистрация пользователя");
         UserApp userApp = modelMapper.map(user, UserApp.class);
-        userApp.setPassword(bCryptPasswordEncoder.encode(userApp.getPassword()));
-        return userRepository.save(userApp);
+        userApp.setPassword(encoder.encode(user.getPassword()));
+        userRepository.save(userApp);
+        return userApp;
     }
 
     public String verify(UserRegisterDto user) {
-        Authentication authentication = authenticationManager
-                .authenticate(
-                        new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
 
         if (!authentication.isAuthenticated()) {
             log.info("Аунтификация неудалась");
             return "fail";
         }
-        return jwtService.generate(user.getName());
+        return jwtService.generateToken(user.getName());
     }
 }

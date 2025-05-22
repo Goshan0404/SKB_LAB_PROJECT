@@ -1,7 +1,9 @@
-package sinara_project.models;
+package sinara_project.models.pizza;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import sinara_project.models.ingredient.Ingredient;
+import sinara_project.models.order.UserOrder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +26,7 @@ public class Pizza {
     @JoinTable(
             name = "pizza_constitution",
             joinColumns = @JoinColumn(name = "pizza_id"),
-            inverseJoinColumns = @JoinColumn(name = "constitution_id")
+            inverseJoinColumns = @JoinColumn(name = "ingredients_id")
     )
-    private Set<Constitution> constitutions = new HashSet<>();
+    private Set<Ingredient> ingredients = new HashSet<>();
 }

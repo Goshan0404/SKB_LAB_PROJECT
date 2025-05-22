@@ -1,7 +1,8 @@
-package sinara_project.models;
+package sinara_project.models.order;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import sinara_project.models.pizza.Pizza;
 import sinara_project.models.user.UserApp;
 
 import java.util.HashSet;

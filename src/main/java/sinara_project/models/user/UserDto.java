@@ -1,7 +1,7 @@
 package sinara_project.models.user;
 
 import lombok.Data;
-import sinara_project.models.UserOrder;
+import sinara_project.models.order.UserOrder;
 
 import java.util.Set;
 
