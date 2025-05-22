@@ -1,0 +1,93 @@
+package sinara_project.service;
+
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+import sinara_project.models.ingredient.Ingredient;
+import sinara_project.models.ingredient.IngredientDto;
+import sinara_project.models.order.UserOrder;
+import sinara_project.models.order.UserOrderDto;
+import sinara_project.models.pizza.Pizza;
+import sinara_project.models.pizza.PizzaDto;
+import sinara_project.models.user.UserApp;
+import sinara_project.repositories.IngredientRepository;
+import sinara_project.repositories.OrderRepository;
+import sinara_project.repositories.PizzaRepository;
+import sinara_project.repositories.UserRepository;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Service
+public class OrderModelService {
+
+    private final OrderRepository orderRepository;
+    private final PizzaRepository pizzaRepository;
+    private final IngredientRepository ingredientRepository;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+
+    public OrderModelService(OrderRepository orderRepository, PizzaRepository pizzaRepository, IngredientRepository ingredientRepository, UserRepository userRepository, ModelMapper modelMapper) {
+        this.orderRepository = orderRepository;
+        this.pizzaRepository = pizzaRepository;
+        this.ingredientRepository = ingredientRepository;
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    @Transactional
+    public UserOrder mapAndSave(UserOrderDto dto) {
+        UserApp user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Set<Pizza> pizzas = dto.getPizzas().stream()
+                .map(this::mapPizzaWithIngredients)
+                .collect(Collectors.toSet());
+
+        UserOrder order = new UserOrder();
+        order.setUser(user);
+        order.setPizzas(pizzas);
+
+        return orderRepository.save(order);
+    }
+
+    private Pizza mapPizzaWithIngredients(PizzaDto pizzaDto) {
+        Pizza pizza;
+
+        if (pizzaDto.getId() != 0) {
+            pizza = pizzaRepository.findById(pizzaDto.getId())
+                    .orElse(null);
+            if (pizza != null) {
+                return pizza;
+            }
+        }
+
+        pizza = modelMapper.map(pizzaDto, Pizza.class);
+
+        Set<Ingredient> ingredients = pizzaDto.getIngredients().stream()
+                .map(this::resolveIngredient)
+                .collect(Collectors.toSet());
+
+        pizza.setIngredients(ingredients);
+
+        return pizzaRepository.save(pizza);
+    }
+
+    private Ingredient resolveIngredient(IngredientDto dto) {
+        if (dto.getId() != 0) {
+            return ingredientRepository.findById(dto.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
+        }
+
+
+        return ingredientRepository.findAll().stream()
+                .filter(i -> i.getName().equalsIgnoreCase(dto.getName()))
+                .findFirst()
+                .orElseGet(() -> {
+                    Ingredient newIng = new Ingredient();
+                    newIng.setName(dto.getName());
+                    return ingredientRepository.save(newIng);
+                });
+    }
+}
