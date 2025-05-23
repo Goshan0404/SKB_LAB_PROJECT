@@ -9,11 +9,18 @@ import java.util.Set;
 
 @Data
 @Entity
+@Table(
+
+        indexes = {
+                @Index(name = "idx_name", columnList = "name")
+        }
+)
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false, unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "ingredients")

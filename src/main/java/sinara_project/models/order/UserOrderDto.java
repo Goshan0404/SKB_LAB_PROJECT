@@ -8,7 +8,6 @@ import java.util.Set;
 
 @Data
 public class UserOrderDto {
-    private long id;
     private long userId;
     private Set<PizzaDto> pizzas = new HashSet<>();
 

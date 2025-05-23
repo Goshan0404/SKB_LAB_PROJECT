@@ -8,7 +8,6 @@ import java.util.Set;
 
 @Data
 public class PizzaDto {
-    private long id;
     private String name;
     private int size;
     private Set<IngredientDto> ingredients = new HashSet<>();
