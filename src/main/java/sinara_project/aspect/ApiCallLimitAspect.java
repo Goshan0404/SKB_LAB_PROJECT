@@ -20,7 +20,7 @@ public class ApiCallLimitAspect {
     @Autowired
     private RequestCounter requestCounter;
 
-    @Pointcut("execution(* com.example.start.controller.ApiController.*(..)))")
+    @Pointcut("execution(* sinara_project.controllers.OrderController.*(..))")
     public void apiMethods() {
     }
 
@@ -32,7 +32,7 @@ public class ApiCallLimitAspect {
         requestCounter.increment(methodName);
 
         if (currentCount >= maxApiCalls) {
-            log.info("Лимит для метода: ", methodName);
+            log.info("Current limit: ", methodName);
             return null;
         }
         return joinPoint.proceed();
