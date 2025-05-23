@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import sinara_project.aspect.RequestLimit;
 import sinara_project.metrics.UserOrderMetrics;
 import sinara_project.models.order.UserOrderDto;
 import sinara_project.repositories.OrderRepository;
@@ -23,6 +24,7 @@ public class OrderController {
     @Autowired
     private UserOrderMetrics metrics;
 
+    @RequestLimit
     @PostMapping("/order/create")
     public void createOrder(@RequestBody UserOrderDto order) {
         orderServiceProducer.createOrder(order);

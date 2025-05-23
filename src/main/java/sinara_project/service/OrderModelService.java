@@ -2,6 +2,7 @@ package sinara_project.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sinara_project.models.ingredient.Ingredient;
@@ -20,6 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class OrderModelService {
 
     private final OrderRepository orderRepository;
@@ -39,7 +41,9 @@ public class OrderModelService {
     @Transactional
     public UserOrder mapAndSave(UserOrderDto dto) {
         UserApp user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    log.info("User not found");
+                    return new EntityNotFoundException("User not found");});
 
         Set<Pizza> pizzas = dto.getPizzas().stream()
                 .map(this::mapPizzaWithIngredients)
@@ -55,8 +59,8 @@ public class OrderModelService {
     private Pizza mapPizzaWithIngredients(PizzaDto pizzaDto) {
         Pizza pizza;
 
-        if (pizzaDto.getId() != 0) {
-            pizza = pizzaRepository.findById(pizzaDto.getId())
+        if (pizzaDto.getName() == null || pizzaDto.getName().isBlank()) {
+            pizza = pizzaRepository.findByName(pizzaDto.getName())
                     .orElse(null);
             if (pizza != null) {
                 return pizza;
@@ -75,11 +79,12 @@ public class OrderModelService {
     }
 
     private Ingredient resolveIngredient(IngredientDto dto) {
-        if (dto.getId() != 0) {
-            return ingredientRepository.findById(dto.getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
+        if (dto.getName() == null || dto.getName().isBlank()) {
+            return ingredientRepository.findByName(dto.getName())
+                    .orElseThrow(() -> {
+                        log.info("Ingredient is nor found");
+                        return new EntityNotFoundException("Ingredient is not found");});
         }
-
 
         return ingredientRepository.findAll().stream()
                 .filter(i -> i.getName().equalsIgnoreCase(dto.getName()))
