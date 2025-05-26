@@ -1,5 +1,5 @@
 # About
-Assignment for Sinala lab course.
+Assignment for Sinara lab course.
 
 ## Description
 The project presents backend server for pizza order service. Contains sub service (SINARA_LAB_MICRO_SERVICE)[https://github.com/Goshan0404/SKB_LAB_MICRO_SERVICE].
