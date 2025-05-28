@@ -40,6 +40,7 @@ public class UserService {
     }
 
     public UserDto register(UserRegisterDto user) {
+        log.info("Registering user");
         UserApp userApp = modelMapper.map(user, UserApp.class);
         userApp.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(userApp);
@@ -47,17 +48,21 @@ public class UserService {
     }
 
     public String verify(UserRegisterDto user) {
+        log.info("Authentication user");
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
 
         if (!authentication.isAuthenticated()) {
-            log.info("Аунтификация неудалась");
+            log.info("Auth failed");
             return "fail";
         }
         return jwtService.generateToken(user.getName());
     }
 
     public UserDto getProfile(long id) {
-        UserApp user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        UserApp user = userRepository.findById(id).orElseThrow(() -> {
+            log.info("User is not found");
+            return new EntityNotFoundException("User is not found");
+        });
         return modelMapper.map(user, UserDto.class);
     }
 
