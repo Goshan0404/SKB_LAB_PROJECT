@@ -18,7 +18,7 @@ public class OrderServiceProducer {
     private final String orderCreatedTopic;
 
     @Autowired
-    private OrderModelService repository;
+    private OrderModelService modelService;
 
     public OrderServiceProducer(KafkaTemplate<String, UserOrderDto> kafkaTemplate, @Value("${kafka.topic.order-created}") String orderCreatedTopic) {
         this.kafkaTemplate = kafkaTemplate;
@@ -27,7 +27,7 @@ public class OrderServiceProducer {
 
     public void createOrder(UserOrderDto order) {
         log.info("Saving order in db");
-        repository.mapAndSave(order);
+        modelService.mapAndSave(order);
 
         log.info("Creating event for order");
         try {
