@@ -42,8 +42,8 @@ public class OrderModelService {
     public UserOrder mapAndSave(UserOrderDto dto) {
         UserApp user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> {
-                    log.info("User not found");
-                    return new EntityNotFoundException("User not found");});
+                    log.info("User is not found");
+                    return new EntityNotFoundException("User is not found");});
 
         Set<Pizza> pizzas = dto.getPizzas().stream()
                 .map(this::mapPizzaWithIngredients)
