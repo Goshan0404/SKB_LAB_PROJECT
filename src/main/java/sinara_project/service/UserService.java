@@ -1,5 +1,6 @@
 package sinara_project.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import sinara_project.models.user.UserApp;
+import sinara_project.models.user.UserDto;
 import sinara_project.models.user.UserRegisterDto;
 import sinara_project.repositories.UserRepository;
 
@@ -37,11 +39,11 @@ public class UserService {
         this.encoder = new BCryptPasswordEncoder(encoderStrength);
     }
 
-    public UserApp register(UserRegisterDto user) {
+    public UserDto register(UserRegisterDto user) {
         UserApp userApp = modelMapper.map(user, UserApp.class);
         userApp.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(userApp);
-        return userApp;
+        return modelMapper.map(user, UserDto.class);
     }
 
     public String verify(UserRegisterDto user) {
@@ -52,5 +54,14 @@ public class UserService {
             return "fail";
         }
         return jwtService.generateToken(user.getName());
+    }
+
+    public UserDto getProfile(long id) {
+        UserApp user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return modelMapper.map(user, UserDto.class);
+    }
+
+    public void deleteProflie(long id) {
+        userRepository.deleteById(id);
     }
 }
