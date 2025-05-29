@@ -1,23 +1,23 @@
-//package sinara_project.service;
-//
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.context.ApplicationEventPublisher;
-//import org.springframework.stereotype.Service;
-//import sinara_project.OrderCreatedEvent;
-//import sinara_project.models.order.UserOrder;
-//
-//@Slf4j
-//@Service
-//public class OrderService {
-//    private final ApplicationEventPublisher eventPublisher;
-//
-//    public OrderService(ApplicationEventPublisher eventPublisher) {
-//        this.eventPublisher = eventPublisher;
-//    }
-//
-//    public void createOrder(UserOrder order) {
-//        log.info("Создание заказа");
-//        log.info("Создание ивента для создания заказа");
-//        eventPublisher.publishEvent(new OrderCreatedEvent(this, order));
-//    }
-//}
+package sinara_project.service;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import sinara_project.models.order.UserOrderDto;
+import sinara_project.repositories.OrderRepository;
+
+@Service
+public class OrderService {
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public Page<UserOrderDto> getUserOrders(Long userId, PageRequest of) {
+        return orderRepository.findAllById(userId, of).map((userORder) -> modelMapper.map(userORder, UserOrderDto.class));
+    }
+}
