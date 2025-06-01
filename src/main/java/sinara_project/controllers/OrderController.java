@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import sinara_project.aspect.RequestLimit;
 import sinara_project.metrics.UserOrderMetrics;
+import sinara_project.models.order.UserOrder;
 import sinara_project.models.order.UserOrderDto;
 import sinara_project.service.order.OrderService;
 import sinara_project.service.order.OrderServiceProducer;
@@ -26,9 +27,10 @@ public class OrderController {
 
     @RequestLimit
     @PostMapping("/order/create")
-    public void createOrder(@RequestBody UserOrderDto order) {
-        orderServiceProducer.createOrder(order);
+    public UserOrderDto createOrder(@RequestBody UserOrderDto order) {
+        var result =  orderServiceProducer.createOrder(order);
         metrics.increment(order);
+        return result;
     }
 
     @GetMapping("order")
