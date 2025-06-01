@@ -1,4 +1,4 @@
-package sinara_project.service;
+package sinara_project.service.order;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;

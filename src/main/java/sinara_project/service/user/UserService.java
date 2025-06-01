@@ -1,4 +1,4 @@
-package sinara_project.service;
+package sinara_project.service.user;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import sinara_project.models.user.UserDto;
 import sinara_project.models.user.UserRegisterDto;
-import sinara_project.service.UserService;
+import sinara_project.service.user.UserService;
 
 @RestController
 public class UserController {

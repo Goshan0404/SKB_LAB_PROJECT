@@ -1,4 +1,4 @@
-package sinara_project.service;
+package sinara_project.service.order;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

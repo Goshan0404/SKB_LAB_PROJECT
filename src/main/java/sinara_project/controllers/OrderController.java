@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import sinara_project.aspect.RequestLimit;
 import sinara_project.metrics.UserOrderMetrics;
 import sinara_project.models.order.UserOrderDto;
-import sinara_project.repositories.OrderRepository;
-import sinara_project.service.OrderService;
-import sinara_project.service.OrderServiceProducer;
+import sinara_project.service.order.OrderService;
+import sinara_project.service.order.OrderServiceProducer;
 
 
 @RestController()

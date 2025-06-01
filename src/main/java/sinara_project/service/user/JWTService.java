@@ -1,4 +1,4 @@
-package sinara_project.service;
+package sinara_project.service.user;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

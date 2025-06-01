@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import sinara_project.service.JWTService;
-import sinara_project.service.UserAppDetailsService;
+import sinara_project.service.user.JWTService;
+import sinara_project.service.user.UserAppDetailsService;
 
 import java.io.IOException;
 @Component
