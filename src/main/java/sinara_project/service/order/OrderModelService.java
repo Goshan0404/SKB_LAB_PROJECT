@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import sinara_project.models.ingredient.Ingredient;
 import sinara_project.models.ingredient.IngredientDto;
@@ -39,6 +40,7 @@ public class OrderModelService {
     }
 
     @Transactional
+    @CacheEvict(value = "userOrder", key = "#dto.userId")
     public UserOrder mapAndSave(UserOrderDto dto) {
         UserApp user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> {

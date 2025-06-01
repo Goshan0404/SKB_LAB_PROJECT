@@ -1,6 +1,7 @@
 package sinara_project.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class OrderController {
     }
 
     @GetMapping("order")
+    @Cacheable(value = "userOrder", key = "#userId")
     public Page<UserOrderDto> getUserOrders(@RequestBody Long userId, @RequestParam("offset") Integer offset,
                               @RequestParam("limit") Integer limit) {
         return orderService.getUserOrders(userId, PageRequest.of(offset, limit));
