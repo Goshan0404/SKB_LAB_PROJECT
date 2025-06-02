@@ -13,3 +13,6 @@ put this project and [sub project](https://github.com/Goshan0404/SKB_LAB_MICRO_S
 docker compose up --build
 
 to build and run docker-compose.yaml from this project.
+
+
+docker-compose contains services: pgamdin, postgres, 3 kafka services, skb_lab_project, skb_lab_micro_service 
