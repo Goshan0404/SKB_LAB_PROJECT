@@ -10,7 +10,7 @@ Proviedes crud operations in postgresql with auth and order entities, api rest c
 ## How to run
 put this project and [sub project](https://github.com/Goshan0404/SKB_LAB_MICRO_SERVICE) in common directory, then run:
 
-docker compose up --build
+```docker compose up --build```
 
 to build and run docker-compose.yaml from this project.
 
