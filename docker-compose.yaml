@@ -20,13 +20,12 @@ services:
     ports:
       - "5050:80"
 
-  app:
+  app_1:
     build: .
     ports:
       - "8080:8080"
     depends_on:
       - my_db
-
       - kafka-1
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://my_db:5432/my_db'
@@ -35,9 +34,9 @@ services:
   app_2:
     build: ../SKB_LAB_MICRO_SERVICE
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
-      - kafka_1
+      - kafka-1
 
   kafka-1:
     image: bitnami/kafka:latest
@@ -84,5 +83,3 @@ services:
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
-    volumes:
-      - e:/kafka/temp/docker-compose/volumes/server-3/:/bitnami/kafka
